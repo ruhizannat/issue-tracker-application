@@ -28,7 +28,7 @@ const Issue = ({issue}) =>{
                // if delete button is clicked
               // you can delete issue
               deleteIssue(id)
-              toast.success('issue is deleted successfully');
+             
            }
           
           setShow(false)

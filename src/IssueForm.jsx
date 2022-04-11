@@ -12,12 +12,17 @@ import TextInput from './formInputs/TextINput';
 import DateInput from './formInputs/DateInput';
 
 import CommonCheckValuesInput from './formInputs/CommonCheckValuesInput';
+import axiosAPI from './utils/axiosAPI';
+import useToken from './hooks/useToken';
+import SelectInput from './formInputs/SelectInput';
 
 
 
 
 
 const IssueForm = ({addIssue, updateIssue, issue:issueToEdit}) =>{
+
+
    const [issue, setIssue] = useState({
       title: '',
       subTitle: '',
@@ -28,6 +33,9 @@ const IssueForm = ({addIssue, updateIssue, issue:issueToEdit}) =>{
       status: '',
       completedPercentage: 0
    })
+
+
+
    const navigate = useNavigate()
 
  const [errors, setErrors] = useState({
@@ -38,6 +46,29 @@ const IssueForm = ({addIssue, updateIssue, issue:issueToEdit}) =>{
    endDate: '',
  })
 
+  const {token, tokenLoaded} = useToken()
+  const [users, setUsers] = useState(null)
+const loadUser =async () =>{
+ const data = await axiosAPI({
+    method: 'get',
+    url: '/users',
+    config: {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    
+     }
+  })
+  const users = data.map((user) => ({id: user.id, username: user.username}))
+  setUsers(users)
+}
+
+ useEffect(() =>{
+  if(tokenLoaded && token){
+    loadUser()
+  }
+
+ }, [tokenLoaded, token])
 
  useEffect(() =>{
    if(issueToEdit){
@@ -111,20 +142,18 @@ const IssueForm = ({addIssue, updateIssue, issue:issueToEdit}) =>{
          updateIssue({
             ...issue
          })
-          toast.success('issue is Updated successfully')
-          return navigate('/issues')
+         
           
               
        }
-       if(isValid){
+       if(isValid && !issue.id){
            // form submission
           addIssue({
-              id: uuid(),
+            
               ...issue
           })
          
-           toast.success('issue is added successfully')
-           navigate('/issues')
+          
            // reset after submitting
            // setIssue(defaultIssue)
        }
@@ -139,21 +168,21 @@ const IssueForm = ({addIssue, updateIssue, issue:issueToEdit}) =>{
         name: 'priority',
         label: 'High',
         value: 'high',
-        valueToChecked: priority
+        valueToCheck: priority
 
       },
       {
         name: 'priority',
         label: 'Medium',
         value: 'medium',
-        valueToChecked: priority
+        valueToCheck: priority
 
       },
       {
         name: 'priority',
         label: 'Low',
         value: 'low',
-        valueToChecked: priority
+        valueToCheck: priority
 
       },
     ]
@@ -163,21 +192,21 @@ const statusValues =[
     name: 'status',
     label: 'New',
     value: 'new',
-    valueToChecked: status
+    valueToCheck: status
 
   },
   {
     name: 'status',
     label: 'In Progress',
-    value: 'InProgress',
-    valueToChecked: status
+    value: 'inProgress',
+    valueToCheck: status
 
   },
   {
     name: 'status',
     label: 'Completed',
     value: 'completed',
-    valueToChecked: status
+    valueToCheck: status
 
   },
 ] 
@@ -208,8 +237,18 @@ const statusValues =[
           error={errorSubTitle}
           as='textarea'
         />
+      
+       <SelectInput 
+          label='Assigned To'
+          name='assignedTo'
+          onChange={handelChange}
+          value={assignedTo}
+          error={errorAssignedTo}
+          users={users}
+       
+       />
 
-      <TextInput 
+      {/* <TextInput 
            label='Assigned To'
            type='text'
            name='assignedTo'
@@ -217,7 +256,7 @@ const statusValues =[
            value={assignedTo}
            placeholder='Enter name whom you have assigned to'
           error={errorAssignedTo}
-        />
+        /> */}
 
 
 

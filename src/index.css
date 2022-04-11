@@ -16,3 +16,12 @@ form label{
     font-size: 1.5rem !important;
    
 }
+
+.btn-icon {
+    position: absolute;
+    right: 15rem;
+    margin-top: -2rem;
+    /* margin: -38px -3rem; */
+    /* padding: 10px 15px !important; */
+    /* display: flex; */
+}

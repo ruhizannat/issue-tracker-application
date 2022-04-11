@@ -10,19 +10,19 @@ const IssueBar = () =>{
             <Row>
                 <Col>
                   {' '}
-                   <span>Total: {totalCount}</span>
+                   <span>Total: </span>{totalCount}
                 </Col>
                 <Col>
                   {' '}
-                   <span className="text-primary">New: {newCount}</span>
+                   <span className="text-primary">New: </span>{newCount}
                 </Col>
                 <Col>
                   {' '}
-                   <span className="text-info">In Progress: {progressCount}</span>
+                   <span className="text-info">In Progress: </span>{progressCount}
                 </Col>
                 <Col>
                   {' '}
-                   <span className="text-success">Completed: {completedCount}</span>
+                   <span className="text-success">Completed: </span>{completedCount}
                 </Col>
 
             </Row>
